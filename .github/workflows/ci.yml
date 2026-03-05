@@ -1,0 +1,52 @@
+# .github/workflows/ci.yml
+# Pipeline de Integrare Continua pentru auth-service
+# Declansat automat la orice push sau pull request pe ramurile main si develop
+
+name: "CI — Testare Automata"
+
+on:
+  push:
+    branches: [ "main", "develop" ]
+  pull_request:
+    branches: [ "main", "develop" ]
+
+jobs:
+  test:
+    name: "Rulare suite de teste Python"
+    runs-on: ubuntu-latest
+
+    steps:
+      # Pasul 1: Descarcam codul sursa
+      - name: "📥 Checkout cod sursa"
+        uses: actions/checkout@v4
+
+      # Pasul 2: Configuram versiunea Python
+      - name: "🐍 Configurare Python 3.11"
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"          # Cache pentru dependente -> build-uri mai rapide
+
+      # Pasul 3: Instalam dependentele
+      - name: "📦 Instalare dependente"
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      # Pasul 4: Rulam testele cu raport de acoperire
+      - name: "🧪 Rulare teste cu raport de acoperire"
+        run: |
+          pytest tests/ \
+            --cov=src \
+            --cov-report=xml:coverage.xml \
+            --cov-report=term-missing \
+            --cov-fail-under=80 \
+            -v
+
+      # Pasul 5: Publicam raportul de acoperire (optional)
+      - name: "📊 Publicare raport de acoperire"
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage.xml
