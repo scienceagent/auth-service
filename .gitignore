@@ -1,0 +1,45 @@
+﻿# ================================
+# Fișiere generate de Python
+# ================================
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg-info/
+dist/
+build/
+*.egg
+
+# ================================
+# Medii virtuale Python
+# ================================
+venv/
+env/
+.env
+.venv
+
+# ================================
+# Rapoarte de testare și acoperire
+# ================================
+.coverage
+htmlcov/
+coverage.xml
+.pytest_cache/
+*.log
+
+# ================================
+# Fișiere IDE și editor
+# ================================
+.idea/
+.vscode/
+*.swp
+*.swo
+.DS_Store
+
+# ================================
+# Variabile de mediu (SECURITATE!)
+# ================================
+.env.local
+.env.production
+secrets.txt
